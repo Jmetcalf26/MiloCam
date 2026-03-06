@@ -1,0 +1,53 @@
+rtsp://192.168.1.205:554/stream1
+Server running on http://localhost:3000
+[RTSP] Attempting to connect to: rtsp://192.168.1.205:554/stream1
+[RTSP] Connected. Media details: {
+  "codec": "H264",
+  "mediaSource": {
+    "rtp": [
+      {
+        "payload": 96,
+        "codec": "H264",
+        "rate": 90000
+      }
+    ],
+    "fmtp": [
+      {
+        "payload": 96,
+        "config": "packetization-mode=1; profile-level-id=640032; sprop-parameter-sets=Z2QAMqzSAKAC1oQAAA+kAAJxoBA=,aOqPLA=="
+      }
+    ],
+    "type": "video",
+    "port": 0,
+    "protocol": "RTP/AVP",
+    "payloads": 96,
+    "connection": {
+      "version": 4,
+      "ip": "0.0.0.0"
+    },
+    "bandwidth": [
+      {
+        "type": "AS",
+        "limit": 4096
+      }
+    ],
+    "invalid": [
+      {
+        "value": "range:npt=0-"
+      }
+    ],
+    "control": "track1"
+  },
+  "transport": {
+    "destination": "192.168.1.162",
+    "source": "192.168.1.205",
+    "client_port": "5000-5001",
+    "server_port": "47826-47827"
+  },
+  "isH264": true
+}
+[WebRTC] Using H264 parameters from RTSP: packetization-mode=1; profile-level-id=640032; sprop-parameter-sets=Z2QAMqzSAKAC1oQAAA+kAAJxoBA=,aOqPLA==
+[RTSP] Play command sent
+[RTSP] Packet 1 keys: [ 'id', 'timestamp', 'marker', 'payload', 'length' ]
+[RTSP] Packet 1 sample: {"timestamp":0,"marker":0}
+[RTSP] Received 500 packets (Total: 500)

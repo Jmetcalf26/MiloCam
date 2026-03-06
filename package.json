@@ -1,0 +1,37 @@
+{
+  "name": "milocam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_OPTIONS='--loader ts-node/esm --no-warnings' node server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jmetcalf26/MiloCam.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Jmetcalf26/MiloCam/issues"
+  },
+  "homepage": "https://github.com/Jmetcalf26/MiloCam#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "sdp-transform": "^3.0.0",
+    "werift": "^0.22.9",
+    "ws": "^8.19.0",
+    "yellowstone": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.3.1",
+    "@types/ws": "^8.18.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

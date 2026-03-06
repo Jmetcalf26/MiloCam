@@ -1,0 +1,62 @@
+rtsp://192.168.1.205:554/stream1
+Server running on http://localhost:3000
+[RTSP] Attempting to connect to: rtsp://192.168.1.205:554/stream1
+[RTSP] Connected. Media details: {
+  "codec": "H264",
+  "mediaSource": {
+    "rtp": [
+      {
+        "payload": 96,
+        "codec": "H264",
+        "rate": 90000
+      }
+    ],
+    "fmtp": [
+      {
+        "payload": 96,
+        "config": "packetization-mode=1; profile-level-id=640032; sprop-parameter-sets=Z2QAMqzSAKAC1oQAAA+kAAJxoBA=,aOqPLA=="
+      }
+    ],
+    "type": "video",
+    "port": 0,
+    "protocol": "RTP/AVP",
+    "payloads": 96,
+    "connection": {
+      "version": 4,
+      "ip": "0.0.0.0"
+    },
+    "bandwidth": [
+      {
+        "type": "AS",
+        "limit": 4096
+      }
+    ],
+    "invalid": [
+      {
+        "value": "range:npt=0-"
+      }
+    ],
+    "control": "track1"
+  },
+  "transport": {
+    "destination": "192.168.1.162",
+    "source": "192.168.1.205",
+    "client_port": "5000-5001",
+    "server_port": "37618-37619"
+  },
+  "isH264": true
+}
+[WebRTC] Using H264 parameters from RTSP: packetization-mode=1; profile-level-id=640032; sprop-parameter-sets=Z2QAMqzSAKAC1oQAAA+kAAJxoBA=,aOqPLA==
+[RTSP] Play command sent
+[RTSP] Received 500 packets (Total: 500) - Current Timestamp: 180000, Marker: 0
+[RTSP] Received 500 packets (Total: 1000) - Current Timestamp: 418500, Marker: 1
+[RTSP] Received 500 packets (Total: 1500) - Current Timestamp: 639000, Marker: 0
+[RTSP] Received 500 packets (Total: 2000) - Current Timestamp: 891000, Marker: 1
+[RTSP] Received 500 packets (Total: 2500) - Current Timestamp: 1080000, Marker: 0
+[RTSP] Received 500 packets (Total: 3000) - Current Timestamp: 1260000, Marker: 0
+[RTSP] Received 500 packets (Total: 3500) - Current Timestamp: 1476000, Marker: 0
+[RTSP] Received 500 packets (Total: 4000) - Current Timestamp: 1714500, Marker: 0
+[RTSP] Received 500 packets (Total: 4500) - Current Timestamp: 1957500, Marker: 0
+[RTSP] Received 500 packets (Total: 5000) - Current Timestamp: 2160000, Marker: 0
+[RTSP] Received 500 packets (Total: 5500) - Current Timestamp: 2340000, Marker: 0
+[RTSP] Received 500 packets (Total: 6000) - Current Timestamp: 2551500, Marker: 0

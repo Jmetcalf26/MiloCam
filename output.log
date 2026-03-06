@@ -1,0 +1,62 @@
+rtsp://192.168.1.205:554/stream1
+Server running on http://localhost:3000
+[RTSP] Attempting to connect to: rtsp://192.168.1.205:554/stream1
+[RTSP] Connected. Media details: {
+  "codec": "H264",
+  "mediaSource": {
+    "rtp": [
+      {
+        "payload": 96,
+        "codec": "H264",
+        "rate": 90000
+      }
+    ],
+    "fmtp": [
+      {
+        "payload": 96,
+        "config": "packetization-mode=1; profile-level-id=640032; sprop-parameter-sets=Z2QAMqzSAKAC1oQAAA+kAAJxoBA=,aOqPLA=="
+      }
+    ],
+    "type": "video",
+    "port": 0,
+    "protocol": "RTP/AVP",
+    "payloads": 96,
+    "connection": {
+      "version": 4,
+      "ip": "0.0.0.0"
+    },
+    "bandwidth": [
+      {
+        "type": "AS",
+        "limit": 4096
+      }
+    ],
+    "invalid": [
+      {
+        "value": "range:npt=0-"
+      }
+    ],
+    "control": "track1"
+  },
+  "transport": {
+    "destination": "192.168.1.162",
+    "source": "192.168.1.205",
+    "client_port": "5000-5001",
+    "server_port": "45568-45569"
+  },
+  "isH264": true
+}
+[RTSP] Play command sent
+[RTSP] Packet 1: size=20, type=undefined
+[RTSP] Packet 2: size=4, type=undefined
+[RTSP] Packet 3: size=1124, type=undefined
+[RTSP] Packet 4: size=1124, type=undefined
+[RTSP] Packet 5: size=1124, type=undefined
+[RTSP] Received 100 packets (Total: 100)
+[RTSP] Received 100 packets (Total: 200)
+[RTSP] Received 100 packets (Total: 300)
+[RTSP] Received 100 packets (Total: 400)
+[RTSP] Received 100 packets (Total: 500)
+[RTSP] Received 100 packets (Total: 600)
+[RTSP] Received 100 packets (Total: 700)
+[RTSP] Received 100 packets (Total: 800)
