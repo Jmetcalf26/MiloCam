@@ -35,79 +35,136 @@
     <h1>MiloCam Live</h1>
     <video id="remoteVideo" autoplay playsinline></video>
     <div id="status" class="status">Connecting...</div>
+    <button id="startBtn" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer;">Start Stream</button>
 
     <script>
+        const DEBUG = true; 
+        const logger = {
+            log: (...args) => DEBUG && console.log('[LOG]', ...args),
+            warn: (...args) => DEBUG && console.warn('[WARN]', ...args),
+            error: (...args) => console.error('[ERROR]', ...args) 
+        };
+
         const video = document.getElementById('remoteVideo');
         const status = document.getElementById('status');
+        const startBtn = document.getElementById('startBtn');
         
-        const ws = new WebSocket(`ws://${location.host}`);
+        let stream = new MediaStream();
+        video.srcObject = stream;
+
         const pc = new RTCPeerConnection({
             iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
         });
 
-        pc.ontrack = (event) => {
-            console.log('Received track:', event.track.kind);
-            
-            if (event.streams && event.streams[0]) {
-                video.srcObject = event.streams[0];
-            } else {
-                if (!video.srcObject) {
-                    video.srcObject = new MediaStream();
-                }
-                video.srcObject.addTrack(event.track);
-            }
-            
-            event.track.onunmute = () => {
-                console.log('Track unmuted');
-                status.innerText = 'Connected - Streaming';
-            };
-            
-            event.track.onmute = () => {
-                console.log('Track muted');
-            };
+        const ws = new WebSocket(`ws://${location.host}`);
+        logger.log('Starting connection process...');
 
-            status.innerText = 'Connected - Track received, waiting for data...';
+        pc.ontrack = (event) => {
+            logger.log('Received track:', event.track.kind);
+            stream.addTrack(event.track);
             
-            video.play().catch(err => {
-                console.warn('Auto-play failed, waiting for user interaction:', err);
-                status.innerText = 'Connected - Click video to play with audio';
+            // Re-assign srcObject to ensure the browser picks up the new track
+            video.srcObject = stream;
+
+            event.track.onunmute = () => {
+                logger.log(`${event.track.kind} track unmuted`);
+                status.innerText = 'Connected - Streaming ' + event.track.kind;
+            };
+            
+            status.innerText = 'Connected - Track received, waiting for data...';
+        };
+
+        startBtn.onclick = () => {
+            logger.log('Start button clicked');
+            video.play().then(() => {
+                logger.log('Playback started successfully');
+                startBtn.style.display = 'none';
+            }).catch(err => {
+                logger.error('Playback failed:', err);
             });
         };
 
         pc.onicecandidate = (event) => {
             if (event.candidate) {
+                logger.log('Sending ICE candidate');
                 ws.send(JSON.stringify({ type: 'candidate', candidate: event.candidate }));
             }
         };
 
         ws.onopen = async () => {
+            logger.log('WebSocket connection opened');
             status.innerText = 'WebSocket Connected - Negotiating WebRTC...';
             
-            // Add transceivers for video and audio
-            pc.addTransceiver('video', { direction: 'recvonly' });
-            pc.addTransceiver('audio', { direction: 'recvonly' });
+            try {
+                // Add transceivers for video and audio
+                pc.addTransceiver('video', { direction: 'recvonly' });
+                pc.addTransceiver('audio', { direction: 'recvonly' });
 
-            const offer = await pc.createOffer();
-            await pc.setLocalDescription(offer);
-            ws.send(JSON.stringify({ type: 'offer', offer }));
+                const offer = await pc.createOffer();
+                logger.log('Created WebRTC offer');
+                await pc.setLocalDescription(offer);
+                ws.send(JSON.stringify({ type: 'offer', offer }));
+                logger.log('Sent WebRTC offer to server');
+            } catch (err) {
+                logger.error('Error starting WebRTC negotiation:', err);
+                status.innerText = 'Error starting negotiation';
+            }
         };
 
-        ws.onmessage = async (event) => {
-            const message = JSON.parse(event.data);
+        let remoteDescriptionSet = false;
+        const candidateQueue = [];
 
-            if (message.type === 'answer') {
-                await pc.setRemoteDescription(message.answer);
-            } else if (message.type === 'candidate') {
-                await pc.addIceCandidate(message.candidate);
+        ws.onmessage = async (event) => {
+            try {
+                const message = JSON.parse(event.data);
+                logger.log(`Received message from server: ${message.type}`);
+
+                if (message.type === 'answer') {
+                    await pc.setRemoteDescription(message.answer);
+                    remoteDescriptionSet = true;
+                    logger.log('Set remote description from answer');
+                    
+                    // Process queued candidates
+                    while (candidateQueue.length > 0) {
+                        const candidate = candidateQueue.shift();
+                        await pc.addIceCandidate(candidate);
+                        logger.log('Added queued remote ICE candidate');
+                    }
+                } else if (message.type === 'candidate') {
+                    if (remoteDescriptionSet) {
+                        await pc.addIceCandidate(message.candidate);
+                        logger.log('Added remote ICE candidate');
+                    } else {
+                        logger.log('Queuing remote ICE candidate (remote description not set)');
+                        candidateQueue.push(message.candidate);
+                    }
+                }
+            } catch (err) {
+                logger.error('Error handling WebSocket message:', err);
             }
         };
 
         ws.onclose = () => {
+            logger.log('WebSocket connection closed');
             status.innerText = 'Disconnected from server';
+        };
+
+        ws.onerror = (err) => {
+            logger.error('WebSocket error:', err);
+            status.innerText = 'WebSocket Error';
+        };
+
+        pc.onconnectionstatechange = () => {
+            logger.log('WebRTC Connection State changed:', pc.connectionState);
+        };
+
+        pc.oniceconnectionstatechange = () => {
+            logger.log('ICE Connection State changed:', pc.iceConnectionState);
         };
 
         // Handle autoplay issues
         video.onclick = () => {
+            logger.log('Video clicked, attempting play()');
             video.play();
         };
     </script>
